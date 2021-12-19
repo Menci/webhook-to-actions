@@ -1,0 +1,6 @@
+name = "webhook-to-actions"
+type = "javascript"
+account_id = ""
+workers_dev = true
+route = ""
+compatibility_date = "2021-12-16"

@@ -1,0 +1,36 @@
+# You can have multiple triggers, with different source / destnation repo
+# And with different secret / token
+triggers:
+  - # Webhook URL: /my-build
+    id: my-build
+
+    # Save your webhook secret to Worker secret "SECRET_TOKEN_MY_BUILD"
+    webhookSecret: SECRET_TOKEN_MY_BUILD
+
+    # Trigger action if
+    if:
+    - # <- Could be an array
+      # Webhook event is "push"
+      event: push
+      # And payload matches the object
+      payload:
+        ref: refs/heads/gh-pages
+      # And URL query matches the object
+      query:
+        param1: value1
+    - # Or a JS expression
+      payload.xxx === "yyy"
+
+    # Save your GitHub PAT to Worker secret "GITHUB_TOKEN"
+    token: GITHUB_TOKEN
+
+    # Trigger the workflow "build" in repo "username/reponame"'s "main" branch
+    # The workflow must have a "workflow_dispatch" event
+    workflow: username/reponame:build.yaml
+    ref: main
+
+    # With the input
+    inputs:
+      # The format "${{ <JS expression> }}" is fixed, not like GitHub Actions
+      # i.e. the beginning must be "${{" and endding must be "}}"
+      ref: ${{ payload.after }}
